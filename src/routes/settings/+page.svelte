@@ -1,43 +1,35 @@
 <script lang="ts">
-  import LayoutShell from '$lib/components/LayoutShell.svelte';
-  import { onMount } from 'svelte';
-  import { currencyCodes, currencyCodeMap } from '$lib/JS/List';
+  import LayoutShell from "$lib/components/LayoutShell.svelte";
+  import { onMount } from "svelte";
+  import { currencyCodes, currencyCodeMap } from "$lib/JS/List";
 
-  let address: string = '';
   let isValid: boolean = false;
-  let currency: string = '';
+  let address: string = "";
+  let currency: string = "";
 
-  const moneroAddressPattern = /^[A-Za-z0-9]{95}$/;
+  const moneroAddressPattern: RegExp = /^[A-Za-z0-9]{95}$/;
 
   onMount(() => {
-    if (typeof window !== 'undefined') {
-      const savedAddress = localStorage.getItem('address');
-      const savedCurrency = localStorage.getItem('currency');
-
-      if (savedAddress) {
-        address = savedAddress;
-      }
-
-      if (savedCurrency) {
-        currency = savedCurrency;
-      } else {
-        currency = 'EUR';
-      }
+    if (typeof window !== "undefined") {
+      address = localStorage.getItem("address") || "";
+      currency = localStorage.getItem("currency")  || "usd";
+      // save the currency since it migh be the default and not saved
+      localStorage.setItem("currency", currency)
     }
   });
 
-  function validateAddress() {
+  function validateAddress(): void {
     isValid = moneroAddressPattern.test(address);
     if (!isValid) {
       alert("Please enter a valid Monero address.");
-      address = '';
+      address = "";
     } else {
-      localStorage.setItem('address', address);
+      localStorage.setItem("address", address);
     }
   }
 
-  function saveCurrency() {
-    localStorage.setItem('currency', currency);
+  function saveCurrency(): void {
+    localStorage.setItem("currency", currency);
   }
 </script>
 

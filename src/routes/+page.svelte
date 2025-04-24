@@ -1,18 +1,25 @@
 <script lang="ts">
-  import { onMount } from 'svelte';
-  import LayoutShell from '$lib/components/LayoutShell.svelte';
-  import { getReturnRate } from '$lib/JS/Api';
-  import { currencySymbols } from '$lib/JS/List';
+  import { onMount } from "svelte";
+  import LayoutShell from "$lib/components/LayoutShell.svelte";
+  import { getReturnRate } from "$lib/JS/Api";
+  import { currencySymbols } from "$lib/JS/List";
 
   let balance = 0;
-  let currency = 'eur';
-  let convertedValue: string = ''
+  let currency = "eur";
+  let convertedValue: string = "";
   let symbol = currencySymbols[currency] || currency.toUpperCase();
 
   onMount(async () => {
-    if (typeof window !== 'undefined') {
-      balance = parseInt(localStorage.getItem('balance') || '0');
-      currency = localStorage.getItem('currency') || 'eur';
+    if (typeof window !== "undefined") {
+      // if address is none redirect to the settings page
+      let address = localStorage.getItem("address")
+      if (address == null) {
+        window.location.replace("/settings");
+        alert("No Monero address defined.");
+      }
+
+      balance = parseInt(localStorage.getItem("balance") || "0");
+      currency = localStorage.getItem("currency") || "usd";
 
       symbol = currencySymbols[currency] || currency.toUpperCase();
     
@@ -21,8 +28,8 @@
       if (rate !== null) {
         convertedValue = (balance * rate).toFixed(2);
       } else {
-        convertedValue = "Error"
-        symbol = ""
+        convertedValue = "Error";
+        symbol = "";
       }
     }
   });
@@ -45,7 +52,7 @@
       <div class="data-block">
         <p class="value">{balance} XMR</p>
         <span class="vr border-l-4"></span>
-        <p class="value">{convertedValue ? `${convertedValue} ${symbol}` : 'Loading...'}</p>
+        <p class="value">{convertedValue ? `${convertedValue} ${symbol}` : "Loading..."}</p>
       </div>
     </div>
   </div>
