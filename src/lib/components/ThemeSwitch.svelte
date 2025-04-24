@@ -3,11 +3,11 @@
     import { onMount } from 'svelte';
   
     let isChecked: boolean = false;
-    let theme: 'light' | 'dark' = 'dark';
+    let theme: 'light' | 'dark' = 'light';
   
     // Load the saved theme from localStorage when the component mounts
     onMount(() => {
-      const savedTheme = localStorage.getItem('mode');
+      const savedTheme = localStorage.getItem('mode') || "dark";
       if (savedTheme === 'dark') {
         theme = 'dark'; // Set theme to dark
         isChecked = true; // Make the switch checked

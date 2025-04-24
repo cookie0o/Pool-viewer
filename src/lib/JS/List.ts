@@ -1,5 +1,7 @@
-// src/currencyData.js
-export const currencyCodes = [
+// Define a type for currency strings
+export type CurrencyLabel = `${string} (${string})`;
+
+export const currencyCodes: CurrencyLabel[] = [
   "Euro (EUR)",
   "United States Dollar (USD)",
   "Japanese Yen (JPY)",
@@ -66,15 +68,12 @@ export const currencyCodes = [
   "Georgian Lari (GEL)",
   "Mongolian Tögrög (MNT)",
   "Armenian Dram (AMD)",
-  "Nicaraguan Córdoba (NIO)",
   "Jamaican Dollar (JMD)",
   "Malawian Kwacha (MWK)",
-  "Zimbabwean Dollar (ZWL)"
+  "Zimbabwean Dollar (ZWL)",
 ];
 
-// src/currencyData.js
-
-export const currencyCodeMap = {
+export const currencyCodeMap: Record<string, string> = {
   "euro (eur)": "eur",
   "united states dollar (usd)": "usd",
   "japanese yen (jpy)": "jpy",
@@ -146,7 +145,7 @@ export const currencyCodeMap = {
   "zimbabwean dollar (zwl)": "zwl",
 };
 
-export const currencySymbols = {
+export const currencySymbols: Record<string, string> = {
   eur: "€",
   usd: "$",
   jpy: "¥",
