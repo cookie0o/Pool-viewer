@@ -3,5 +3,11 @@
 </script>
   
 <LayoutShell title="Settings">
-    <p>Settings page content here...</p>
+    <p>Address</p>
 </LayoutShell>
+
+<style>
+    p {
+        font-size: 20px;
+    }
+</style>
