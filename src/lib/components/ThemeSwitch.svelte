@@ -2,8 +2,8 @@
     import { Moon, Sun } from '@lucide/svelte/icons';
     import { onMount } from 'svelte';
   
-    let isChecked: boolean = false; // This controls the toggle switch
-    let theme: 'light' | 'dark' = 'light'; // Current theme
+    let isChecked: boolean = false;
+    let theme: 'light' | 'dark' = 'dark';
   
     // Load the saved theme from localStorage when the component mounts
     onMount(() => {

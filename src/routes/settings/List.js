@@ -74,7 +74,7 @@ export const currencyCodes = [
 
 // src/currencyData.js
 
-export const currencyCodeMap: Record<string, string> = {
+export const currencyCodeMap = {
   "euro (eur)": "eur",
   "united states dollar (usd)": "usd",
   "japanese yen (jpy)": "jpy",

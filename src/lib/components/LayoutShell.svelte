@@ -1,25 +1,27 @@
 <script lang="ts">
   import ThemeToggle from './ThemeSwitch.svelte';
   import { fade } from 'svelte/transition';
-    export let title: string = 'Page';
-  </script>
 
-  <header class="border-b border-surface-700 h-12 flex items-center justify-center overflow-hidden heading-font-color">
-    <ThemeToggle />
-    <h1 class="text-3xl font-semibold" transition:fade={{duration: 70}}>{title}</h1>
-  </header>
-  
-  <div class="flex">
-    <aside class="w-45 border-r border-surface-700 h-screen flex flex-col justify-start p-4 anchor-font-color">
-      <a href="/" class="menu-link">Home</a>
-      <a href="/payments" class="menu-link">Payments</a>
-      <a href="/settings" class="menu-link">Settings</a>
-    </aside>
-  
-    <main class="flex-1 p-4">
-      <slot />
-    </main>
-  </div>
+  export let title: string = 'Page';
+</script>
+
+<header class="flex items-center justify-center overflow-hidden preset-filled-surface-100-900">
+  <ThemeToggle />
+  <h1 class="h1" transition:fade={{duration: 70}}>{title}</h1>
+</header>
+
+<div class="flex">
+  <aside class="w-45 flex flex-col justify-start p-4">
+    <a href="/" class="menu-link anchor">Home</a>
+    <a href="/payments" class="menu-link anchor">Payments</a>
+    <a href="/settings" class="menu-link anchor">Settings</a>
+  </aside>
+
+  <main class="flex-1 p-4">
+    <slot />
+  </main>
+</div>
+
 <style>
     header {
       height: 50px;
