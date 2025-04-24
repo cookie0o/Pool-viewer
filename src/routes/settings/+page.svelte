@@ -1,7 +1,7 @@
 <script lang="ts">
   import LayoutShell from "$lib/components/LayoutShell.svelte";
   import { onMount } from "svelte";
-  import { currencyCodes, currencyCodeMap } from "$lib/JS/List";
+  import { currencyCodes, currencyCodeMap } from "$lib/TS/List";
 
   let isValid: boolean = false;
   let address: string = "";

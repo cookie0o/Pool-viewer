@@ -1,10 +1,14 @@
 <script lang="ts">
   import { onMount } from "svelte";
   import LayoutShell from "$lib/components/LayoutShell.svelte";
-  import { getReturnRate } from "$lib/JS/Api";
-  import { currencySymbols } from "$lib/JS/List";
+  import {
+    getReturnRate, 
+    getdataXMRPOOLEU
+  } from "$lib/TS/Api";
+  import { currencySymbols } from "$lib/TS/List";
 
-  let balance = 0;
+  let hashrate = "0 KH/s";
+  let balance = 0.0;
   let currency = "eur";
   let convertedValue: string = "";
   let symbol = currencySymbols[currency] || currency.toUpperCase();
@@ -16,20 +20,24 @@
       if (address == null) {
         window.location.replace("/settings");
         alert("No Monero address defined.");
-      }
-
-      balance = parseInt(localStorage.getItem("balance") || "0");
-      currency = localStorage.getItem("currency") || "usd";
-
-      symbol = currencySymbols[currency] || currency.toUpperCase();
-    
-      const rate = await getReturnRate(currency);
-     
-      if (rate !== null) {
-        convertedValue = (balance * rate).toFixed(2);
       } else {
-        convertedValue = "Error";
-        symbol = "";
+        // get data
+        await getdataXMRPOOLEU(address);
+
+        balance = parseFloat(localStorage.getItem("balance") || "0.0");
+        currency = localStorage.getItem("currency") || "usd";
+        hashrate = localStorage.getItem("hashrate") || "0 KH/s";
+
+        symbol = currencySymbols[currency] || currency.toUpperCase();
+      
+        const rate = await getReturnRate(currency);
+      
+        if (rate !== null) {
+          convertedValue = (balance * rate).toFixed(2);
+        } else {
+          convertedValue = "Error";
+          symbol = "";
+        }
       }
     }
   });
@@ -42,7 +50,7 @@
     <div class="card preset-filled-surface-100-900 p-2 text-center" style="flex-grow: 0.5;">
       <h5 class="h5">Total Hashrate</h5>
       <div class="data-block">
-        <p class="value">80 KH/s</p>
+        <p class="value">{hashrate}</p>
       </div>
     </div>
 
