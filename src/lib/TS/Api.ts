@@ -1,6 +1,5 @@
-import {
-  formatHashrate
-} from "$lib/TS/Functions";
+import { formatHashrate } from "$lib/TS/Functions";
+import { renderRigs } from "$lib/TS/RenderRigs";
 
 export async function getReturnRate(currency: string): Promise<number | null> {
   const cacheKey = `monero_rate_${currency}`;
@@ -47,40 +46,66 @@ export async function getReturnRate(currency: string): Promise<number | null> {
 
 export async function getdataXMRPOOLEU(address: string): Promise<number | null> {
   const apiEndpoint = `https://web.xmrpool.eu:8119/stats_address?address=${address}&longpoll=false`;
-  const storedTimestamp = localStorage.getItem('dataTimestamp');
+  const storedTimestamp = localStorage.getItem('dataTimestamp_XMRPOOLEU');
   const currentTime = Date.now();
 
-  // Check if stored data is older than 5 minutes
-  if (storedTimestamp && currentTime - parseInt(storedTimestamp) < 5 * 60 * 1000) {
-    console.log('Data is less than 5 minutes old, using cached data.');
-    return null; // Return null or the cached balance if needed
-  }
-
   try {
-    const response = await fetch(apiEndpoint);
-    const data = await response.json();
-
-    // Ensure the data contains the expected stats and balances
-    if (data.stats) {
-      // balance
-      const balance = (parseFloat(data.stats.balance) / 1000000000000).toFixed(7);
-      localStorage.setItem('balance', balance);
-
-      // hashrate
-      const hashrate = formatHashrate(parseInt(data.stats.hashrate || "0"))
-      localStorage.setItem('hashrate', hashrate);
-
-      // Save the current timestamp
-      localStorage.setItem('dataTimestamp', currentTime.toString());
-      console.log('Fetched new data and saved balance:', balance);
+    // Check if stored data is avalable if not fetch
+    const XMRPOOLEU_data = localStorage.getItem('XMRPOOLEU');
+    if (!XMRPOOLEU_data) {
+      const response = await fetch(apiEndpoint);
+      data = await response.json();
     } else {
-      console.error('Invalid data structure:', data);
+      var data = JSON.parse(localStorage.getItem('XMRPOOLEU') || "").data;
+    }
+    // Check if stored data is older than 5 minutes
+    if (storedTimestamp && currentTime - parseInt(storedTimestamp) < 5 * 60 * 1000) {
+      // Check if the address changed
+      if ((localStorage.getItem("address") || "") !== data.address) {
+        const response = await fetch(apiEndpoint);
+        data = await response.json();
+      }
+      console.log("Data not 5 minutes old, using old data.")
+    } else {
+      const response = await fetch(apiEndpoint);
+      data = await response.json();
     }
 
-    return null; 
+    if (data.stats) {
+      const balance = (parseFloat(data.stats.balance) / 1e12).toFixed(7);
+      const hashrate = data.stats.hashrate || "0";
+      const payments = data.stats.paid || "";
+
+      // If perWorkerStats exists and is an array, process it
+      const perWorkerStats = data.perWorkerStats && Array.isArray(data.perWorkerStats)
+        ? data.perWorkerStats
+        : [];
+
+      const json = {
+        balance,
+        hashrate,
+        payments,
+        perWorkerStats,
+        timestamp: currentTime.toString(),
+        data,
+        address
+      };
+
+      // Store the data in localStorage
+      localStorage.setItem('XMRPOOLEU', JSON.stringify(json));
+      localStorage.setItem('dataTimestamp_XMRPOOLEU', currentTime.toString());
+      console.log("Fetched new data. XMRPOOLEU");
+
+      // Call your imported renderRigs here with perWorkerStats
+      renderRigs(json); // Pass the whole json object to renderRigs
+
+    } else {
+      console.error('Invalid data structure: XMRPOOLEU', data);
+    }
+
+    return null;
   } catch (error) {
-    console.error('Error fetching Monero data:', error);
+    console.error('Error fetching Monero data: XMRPOOLEU', error);
     return null;
   }
 }
-

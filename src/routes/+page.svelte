@@ -1,14 +1,28 @@
 <script lang="ts">
+  import { 
+    Microchip,
+    Clock,
+    Hash,
+	  ThumbsUp,
+	  X,
+	  Pickaxe,
+    CircleDollarSign
+  } from '@lucide/svelte/icons';
   import { onMount } from "svelte";
   import LayoutShell from "$lib/components/LayoutShell.svelte";
+  import { currencySymbols } from "$lib/TS/List";
   import {
     getReturnRate, 
-    getdataXMRPOOLEU
+    getdataXMRPOOLEU,
   } from "$lib/TS/Api";
-  import { currencySymbols } from "$lib/TS/List";
+  import {
+  formatHashrate
+  } from "$lib/TS/Functions";
 
-  let hashrate = "0 KH/s";
-  let balance = 0.0;
+  let hashrate_XMRPOOLEU = "0";
+  let balance_XMRPOOLEU = 0.0;
+  let total_hashrate = "0";
+  let total_balance = 0.0;
   let currency = "eur";
   let convertedValue: string = "";
   let symbol = currencySymbols[currency] || currency.toUpperCase();
@@ -24,16 +38,27 @@
         // get data
         await getdataXMRPOOLEU(address);
 
-        balance = parseFloat(localStorage.getItem("balance") || "0.0");
         currency = localStorage.getItem("currency") || "usd";
-        hashrate = localStorage.getItem("hashrate") || "0 KH/s";
+
+        // XMRPOOLEU data
+        const XMRPOOLEU_data = localStorage.getItem('XMRPOOLEU');
+        if (XMRPOOLEU_data) {
+          const parsed = JSON.parse(XMRPOOLEU_data);
+          balance_XMRPOOLEU = parsed.balance;
+          hashrate_XMRPOOLEU = parsed.hashrate;
+        } else {
+          console.log('No data found for XMRPOOLEU');
+        }
+
+        total_hashrate = formatHashrate(parseInt(hashrate_XMRPOOLEU))
+        total_balance = (balance_XMRPOOLEU)
 
         symbol = currencySymbols[currency] || currency.toUpperCase();
       
         const rate = await getReturnRate(currency);
       
         if (rate !== null) {
-          convertedValue = (balance * rate).toFixed(2);
+          convertedValue = (total_balance * rate).toFixed(2);
         } else {
           convertedValue = "Error";
           symbol = "";
@@ -50,7 +75,7 @@
     <div class="card preset-filled-surface-100-900 p-2 text-center" style="flex-grow: 0.5;">
       <h5 class="h5">Total Hashrate</h5>
       <div class="data-block">
-        <p class="value">{hashrate}</p>
+        <p class="value">{total_hashrate}</p>
       </div>
     </div>
 
@@ -58,11 +83,45 @@
     <div class="card preset-filled-surface-100-900 p-2 text-center" style="flex-grow: 1;">
       <h5 class="h5">Pool Balance</h5>
       <div class="data-block">
-        <p class="value">{balance} XMR</p>
+        <p class="value">{total_balance} XMR</p>
         <span class="vr border-l-4"></span>
         <p class="value">{convertedValue ? `${convertedValue} ${symbol}` : "Loading..."}</p>
       </div>
     </div>
+  </div>
+
+  <p class="middle-text">Your Miner`s</p>
+
+  <!-- labels -->
+  <div class="grid grid-cols-6 gap-4 w-full text-center">
+    <div class="labels">
+      <Pickaxe class="w-4 h-5.7 pr-[2px]" />
+      <p style="margin: 0;">Pool</p>
+    </div>
+    <div class="labels">
+      <Microchip class="w-4 h-5.7 pr-[2px]" />
+      <p style="margin: 0;">Worker ID</p>
+    </div>
+    <div class="labels">
+      <Hash class="w-4 h-5.7 pr-[2px]" />
+      <p style="margin: 0;">Hashrate</p>
+    </div>
+    <div class="labels">
+      <ThumbsUp class="w-4 h-5.7 pr-[2px]" />
+      <p style="margin: 0;">Accepted Hashed</p>
+    </div>
+    <div class="labels">
+      <X class="w-4 h-5.7 pr-[2px]" />
+      <p style="margin: 0;">Bad Hashes</p>
+    </div>
+    <div class="labels">
+      <Clock class="w-4 h-5.7 pr-[2px]" />
+      <p style="margin: 0;">Last Share</p>
+    </div>
+  </div>
+
+  <!-- Miner Container´s -->
+  <div id="miner-container">
   </div>
 </LayoutShell>
 
@@ -84,5 +143,18 @@
 
   .text-center {
     text-align: center;
+  }
+
+  .middle-text {
+    padding-top: 10px;
+    font-size: 20px;
+  }
+
+  .labels {
+    font-size: 17px;
+    white-space: nowrap;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 </style>
