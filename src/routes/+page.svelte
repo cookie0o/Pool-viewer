@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { base } from '$app/paths';
   import { 
     Microchip,
     Clock,
@@ -32,7 +33,7 @@
       // if address is none redirect to the settings page
       let address = localStorage.getItem("address")
       if (address == null) {
-        window.location.replace("/settings");
+        window.location.replace(base+"/settings");
         alert("No Monero address defined.");
       } else {
         // get data

@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { base } from '$app/paths'
   import ThemeToggle from './ThemeSwitch.svelte';
   import { fade } from 'svelte/transition';
 
@@ -12,9 +13,9 @@
 
 <div class="flex">
   <aside class="w-45 flex flex-col justify-start p-4">
-    <a href="/" class="menu-link anchor">Home</a>
-    <a href="/payments" class="menu-link anchor">Payments</a>
-    <a href="/settings" class="menu-link anchor">Settings</a>
+    <a href="{base}/" class="menu-link anchor">Home</a>
+    <a href="{base}/payments" class="menu-link anchor">Payments</a>
+    <a href="{base}/settings" class="menu-link anchor">Settings</a>
   </aside>
 
   <main class="flex-1 p-4">
