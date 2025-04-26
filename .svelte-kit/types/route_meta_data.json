@@ -1,5 +1,12 @@
 {
-	"/": [],
-	"/payments": [],
-	"/settings": []
+	"/": [
+		"src/routes/+layout.js",
+		"src/routes/+layout.js"
+	],
+	"/payments": [
+		"src/routes/+layout.js"
+	],
+	"/settings": [
+		"src/routes/+layout.js"
+	]
 }
