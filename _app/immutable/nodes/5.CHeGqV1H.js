@@ -1,1 +1,0 @@
-import{t as a,a as p}from"../chunks/C-TkrDIZ.js";import"../chunks/D0H1u2mU.js";import{L as r}from"../chunks/B-6fwPC1.js";var n=a("<p>Payments page content here...</p>");function c(t){r(t,{title:"Payments",children:(e,s)=>{var o=n();p(e,o)},$$slots:{default:!0}})}export{c as component};
