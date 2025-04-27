@@ -1,3 +1,4 @@
+import { base } from '$app/paths';
 import { renderRigs } from "$lib/TS/RenderRigs";
 
 let miner_count: number = 0
@@ -70,6 +71,15 @@ export async function getdataXMRPOOLEU(address: string): Promise<number | null> 
     } else {
       const response = await fetch(apiEndpoint);
       data = await response.json();
+    }
+
+    // check if the address has mined jet
+    if (data.error) {
+      console.warn("Wallet address was not found. Your miner has to have at least 1 share accepted by xmrpool.eu");
+
+      //clear data that might be from a previous address
+      localStorage.removeItem('XMRPOOLEU');
+      return 0;
     }
 
     if (data.stats) {
