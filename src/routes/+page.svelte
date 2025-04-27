@@ -27,7 +27,6 @@
   let convertedValue: string = "";
   let symbol = currencySymbols[currency] || currency.toUpperCase();
   let miner_count:number;
-  let plural:string = "";
   let middle_text:string = "Your Miner`s"
 
   onMount(async () => {
