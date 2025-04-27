@@ -76,10 +76,10 @@ export function renderRigs(walletDetails: WalletDetails) {
     const lastShareDisplay = format_UNIX_time(lastShare, "ago");
 
     const rigBlock = document.createElement("div");
-    rigBlock.className = "miner-block preset-filled-surface-100-900";
+    rigBlock.className = "miner-block card preset-filled-surface-100-900";
 
     rigBlock.innerHTML = `
-      <div style="margin-top: 0px; border-radius: 5px; height: 35px; display: flex; justify-content: center; align-items: center;" class="preset-filled-surface-100-900">
+      <div style="margin-top: 0px; height: 35px; border-radius: 5px; display: flex; justify-content: center; align-items: center;" class="card preset-filled-surface-100-900">
         <div class="grid grid-cols-6 gap-4 w-full text-center">
           <div style="display: flex; justify-content: center; align-items: center;">
             <p style="margin: 0;">xmrpool.eu</p>
