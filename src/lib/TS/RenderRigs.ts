@@ -18,14 +18,16 @@ import {
   removePercentage 
 } from "$lib/TS/Functions";
 
+let miner_count:number = 0
+
 /**
  * Render rig stats into the DOM (expects #miner-container to exist).
  */
 export function renderRigs(walletDetails: WalletDetails) {
-  if (!walletDetails?.perWorkerStats?.length) return;
+  if (!walletDetails?.perWorkerStats?.length) return 0;
 
   const container = document.getElementById("miner-container");
-  if (!container) return;
+  if (!container) return 0;
 
   // Sort workers by user-selected order
   const SortingOrder = localStorage.getItem("sortingOrder");
@@ -45,6 +47,7 @@ export function renderRigs(walletDetails: WalletDetails) {
   container.innerHTML = "";
 
   for (const worker of walletDetails.perWorkerStats) {
+    miner_count =+ 1 
     const {
       workerId,
       hashrate,
@@ -101,4 +104,6 @@ export function renderRigs(walletDetails: WalletDetails) {
     `;
     container.appendChild(rigBlock);
   }
+  // return miner count
+  return miner_count
 }

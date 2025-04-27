@@ -7,7 +7,6 @@
 	  ThumbsUp,
 	  X,
 	  Pickaxe,
-    CircleDollarSign
   } from '@lucide/svelte/icons';
   import { onMount } from "svelte";
   import LayoutShell from "$lib/components/LayoutShell.svelte";
@@ -27,6 +26,9 @@
   let currency = "eur";
   let convertedValue: string = "";
   let symbol = currencySymbols[currency] || currency.toUpperCase();
+  let miner_count:number;
+  let plural:string = "";
+  let middle_text:string = "Your Miner`s"
 
   onMount(async () => {
     if (typeof window !== "undefined") {
@@ -36,8 +38,8 @@
         window.location.replace(base+"/settings");
         alert("No Monero address defined.");
       } else {
-        // get data
-        await getdataXMRPOOLEU(address);
+        // get data and miner count
+        miner_count = await getdataXMRPOOLEU(address) || 0;
 
         currency = localStorage.getItem("currency") || "usd";
 
@@ -63,6 +65,15 @@
         } else {
           convertedValue = "Error";
           symbol = "";
+        }
+
+        // show miner count in user interface
+        if (miner_count < 1) {
+          middle_text = "No Miner`s"
+        } else if (miner_count == 1) {
+          middle_text = "Your Miner"
+        } else {
+          middle_text = "Your ${miner_count} Miner's"
         }
       }
     }
@@ -91,7 +102,7 @@
     </div>
   </div>
 
-  <p class="middle-text">Your Miner`s</p>
+  <p class="middle-text">{middle_text}</p>
 
   <!-- labels -->
   <div class="grid grid-cols-6 gap-4 w-full text-center">

@@ -15,6 +15,8 @@
         theme = 'light'; // Set theme to light
         isChecked = false; // Make the switch unchecked
       }
+      // save to localstorage
+      localStorage.setItem("mode", theme)
       applyTheme();
     });
   

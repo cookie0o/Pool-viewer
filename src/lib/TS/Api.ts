@@ -1,5 +1,6 @@
-import { formatHashrate } from "$lib/TS/Functions";
 import { renderRigs } from "$lib/TS/RenderRigs";
+
+let miner_count: number = 0
 
 export async function getReturnRate(currency: string): Promise<number | null> {
   const cacheKey = `monero_rate_${currency}`;
@@ -96,9 +97,9 @@ export async function getdataXMRPOOLEU(address: string): Promise<number | null> 
       localStorage.setItem('dataTimestamp_XMRPOOLEU', currentTime.toString());
       console.log("Fetched new data. XMRPOOLEU");
 
-      // Call your imported renderRigs here with perWorkerStats
-      renderRigs(json); // Pass the whole json object to renderRigs
-
+      // render miners and return count
+      miner_count = (renderRigs(json)); // Pass the whole json object to renderRigs
+      return miner_count;
     } else {
       console.error('Invalid data structure: XMRPOOLEU', data);
     }
